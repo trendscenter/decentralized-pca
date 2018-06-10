@@ -4,3 +4,7 @@ This repository contains the decentralized PCA code written for the new coinstac
 2. master.py - for aggregation of the partial square roots sent by local sites and releasing the energy captured in the top-K subspace
 3. compspec.json - computation specifications
 4. generate_data.py - python file for generating data, not used in the simulator
+
+## Usage
+1. Build the docker image: docker build -t decentralized-pca .
+2. Run the code: coinstac-simulator
