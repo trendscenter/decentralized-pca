@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 import numpy as np
 from utils import listRecursive
@@ -9,7 +10,7 @@ def remote_1(args):
 
     input_list = args["input"]
     all_red_data = np.array([])
-    num_PC = 20
+    num_PC = 100
 
     for site in input_list:
         reduced_data_site = np.array(input_list[site]["reduced_data"])
@@ -28,6 +29,9 @@ def remote_1(args):
         },
         "success": True
     }
+        
+    output_file = os.path.join(args['state']['outputDirectory'], 'decent_pc.data')
+    np.savetxt(output_file, PC_global, fmt='%.6f')
 
     return json.dumps(computation_output)
 

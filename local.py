@@ -13,17 +13,16 @@ def local_1(args):
 
     # read local data
     filename = os.path.join(args["state"]["baseDirectory"], myFile)
-    tmp = np.load(filename).item()
-    Xs = tmp['data']  # a dictionary of all the subjects in the site
+    tmp = np.loadtxt(filename)
+    Xs = dict()
+    Xs[0] = tmp  # a dictionary of all the subjects in the site
     K = 20
-    cov = tmp['cov']  # true cov matrix - for debugging
     reduced_data, _, _ = local_PCA(
-        Xs, num_PC=5 * K, subject_level_PCA=True, subject_level_num_PC=80)
+        Xs, num_PC=5 * K, subject_level_PCA=False, subject_level_num_PC=80)
 
     computation_output = {
         "output": {
             "reduced_data": reduced_data.tolist(),
-            "cov": cov.tolist(),
             "computation_phase": 'local_1'
         }
     }

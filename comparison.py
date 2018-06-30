@@ -26,11 +26,15 @@ if __name__ == '__main__':
 
     # Putting all the data together
     print("stacking train, test and validation data")
-    pooled_data = np.vstack([train, test, valid])  # (4400, 500)
+    all_data = np.vstack((train, test, valid))  # (4400, 500)
 
     # Split data into two sites
     print("splitting data into 2 parts")
-    local0, local1 = np.split(pooled_data, 2)
+    local0, local1 = np.split(all_data, 2)
+    
+    # concatenate sideways
+    print("stacking split data sideways")
+    pooled_data = np.hstack((local0, local1))
 
     # save each part in its correspinding local# folder
     print("saving data in the corresponding local sites folders")
@@ -41,11 +45,11 @@ if __name__ == '__main__':
     pooled_pc, b, c = base_PCA(pooled_data, num_PC=100, axis=1, whitening=True)
 
     print("saving pooled results to a pool_red.data")
-    np.savetxt('pool_red.data', pooled_pc, fmt='%.4f')
+    np.savetxt('pooled_pc.data', pooled_pc, fmt='%.6f')
 
     # Assuming PCA was already ran in the coinstac simulator
     print("loading decentralized results data")
-    decent_pc = np.loadtxt('test/output/remote/simulatorRun/decen_red.data')
+    decent_pc = np.loadtxt('test/output/remote/simulatorRun/decent_pc.data')
 
     if np.array_equal(pooled_pc, decent_pc):
         print("results from pooled and decentralized match")

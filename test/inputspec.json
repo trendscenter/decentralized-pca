@@ -1,3 +1,2 @@
-[{"samples":{"value":"value0.npy"}},
-{"samples":{"value":"value1.npy"}},
-{"samples":{"value":"value2.npy"}}]
+[{"samples":{"value":"local0.data"}},
+{"samples":{"value":"local1.data"}}]
