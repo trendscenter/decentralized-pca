@@ -8,7 +8,7 @@ Created on Sat Jun 30 14:08:19 2018
 
 import numpy as np
 import urllib.request
-from local_ancillary import base_PCA
+from local_ancillary import base_PCA, local_PCA
 
 if __name__ == '__main__':
     # URL from where the data was loaded
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     # Split data into two sites
     print("splitting data into 2 parts")
     local0, local1 = np.split(all_data, 2)
-    
+
     # concatenate sideways
     print("stacking split data sideways")
     pooled_data = np.hstack((local0, local1))
@@ -42,17 +42,42 @@ if __name__ == '__main__':
     np.savetxt('test/local1/simulatorRun/local1.data', local1, fmt='%d')
 
     print("running base_PCA on pooled data")
-    pooled_pc, b, c = base_PCA(pooled_data, num_PC=100, axis=1, whitening=True)
+    pooled_pct, b, c = base_PCA(pooled_data, num_PC=20, axis=1, whitening=True)
+    pooled_pcf, b, c = base_PCA(pooled_data, num_PC=20, axis=1, whitening=False)
 
     print("saving pooled results to a pool_red.data")
-    np.savetxt('pooled_pc.data', pooled_pc, fmt='%.6f')
+    np.savetxt('pooled_pct.data', pooled_pct, fmt='%.6f')
+    np.savetxt('pooled_pcf.data', pooled_pcf, fmt='%.6f')
+
+    # Running Brad's suggestion
+    print("running base_PCA on pooled data")
+    site0 = {'data': local0}
+    local0_pc, _, _ = local_PCA(
+        site0,
+        num_PC=100,
+        mean_removal=None,
+        subject_level_PCA=True,
+        subject_level_num_PC=120)
+
+    site1 = {'data': local1}
+    local1_pc, _, _ = local_PCA(
+        site1,
+        num_PC=100,
+        mean_removal=None,
+        subject_level_PCA=True,
+        subject_level_num_PC=120)
+
+    some_data = np.hstack((local0_pc, local1_pc))
+    brad_pct, _, _ = base_PCA(some_data, num_PC=20, axis=1, whitening=True)
+    brad_pcf, _, _ = base_PCA(some_data, num_PC=20, axis=1, whitening=False)
+
+    print("saving pooled results to a pool_red.data")
+    np.savetxt('brad_pct.data', brad_pct, fmt='%.6f')
+    
+    print("saving pooled results to a pool_red.data")
+    np.savetxt('brad_pcf.data', brad_pcf, fmt='%.6f')
 
     # Assuming PCA was already ran in the coinstac simulator
     print("loading decentralized results data")
-    decent_pc = np.loadtxt('test/output/remote/simulatorRun/decent_pc.data')
-
-    if np.array_equal(pooled_pc, decent_pc):
-        print("results from pooled and decentralized match")
-    else:
-        print("results from pooled and decentralized don't match")
-    
+    decen_pct = np.loadtxt('test/output/remote/simulatorRun/decen_pct.data')
+    decen_pcf = np.loadtxt('test/output/remote/simulatorRun/decen_pcf.data')
