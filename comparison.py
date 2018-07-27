@@ -9,6 +9,7 @@ Created on Sat Jun 30 14:08:19 2018
 import numpy as np
 import urllib.request
 from local_ancillary import base_PCA, local_PCA
+from sklearn.decomposition import PCA
 
 if __name__ == '__main__':
     # URL from where the data was loaded
@@ -31,11 +32,14 @@ if __name__ == '__main__':
     # Split data into two sites
     print("splitting data into 2 parts")
     local0, local1 = np.split(all_data, 2)
+    
+    local0 = local0 - np.reshape(np.mean(local0, axis=0), (1, -1))
+    local1 = local1 - np.reshape(np.mean(local1, axis=0), (1, -1))
 
     # concatenate sideways
     print("stacking split data sideways")
     pooled_data = np.hstack((local0, local1))
-
+    
     # save each part in its correspinding local# folder
     print("saving data in the corresponding local sites folders")
     np.savetxt('test/local0/simulatorRun/local0.data', local0, fmt='%d')
@@ -77,7 +81,7 @@ if __name__ == '__main__':
     print("saving pooled results to a pool_red.data")
     np.savetxt('brad_pcf.data', brad_pcf, fmt='%.6f')
 
-    # Assuming PCA was already ran in the coinstac simulator
-    print("loading decentralized results data")
-    decen_pct = np.loadtxt('test/output/remote/simulatorRun/decen_pct.data')
-    decen_pcf = np.loadtxt('test/output/remote/simulatorRun/decen_pcf.data')
+#    # Assuming PCA was already ran in the coinstac simulator
+#    print("loading decentralized results data")
+#    decen_pct = np.loadtxt('test/output/remote/simulatorRun/decen_pct.data')
+#    decen_pcf = np.loadtxt('test/output/remote/simulatorRun/decen_pcf.data')
