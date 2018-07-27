@@ -56,7 +56,7 @@ if __name__ == '__main__':
         site0,
         num_PC=100,
         mean_removal=None,
-        subject_level_PCA=True,
+        subject_level_PCA=False,
         subject_level_num_PC=120)
 
     site1 = {'data': local1}
@@ -64,7 +64,7 @@ if __name__ == '__main__':
         site1,
         num_PC=100,
         mean_removal=None,
-        subject_level_PCA=True,
+        subject_level_PCA=False,
         subject_level_num_PC=120)
 
     some_data = np.hstack((local0_pc, local1_pc))
